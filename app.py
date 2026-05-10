@@ -54,54 +54,136 @@ button { border-radius: 10px !important; font-weight: 600 !important; }
 """, unsafe_allow_html=True)
 
 # ── MENU LATERAL ───────────────────────────────────────────────
-st.sidebar.markdown("## 🧭 Bússola do Representante")
+st.sidebar.markdown("## 🧭 Bússola")
 st.sidebar.markdown("---")
 modulo = st.sidebar.radio(
     "Módulos",
     ["🏠 Início", "📡 Radar Comercial", "💰 CotaBot — Cotação"],
     label_visibility="collapsed"
 )
+st.sidebar.markdown("---")
+st.sidebar.markdown("""
+<div style='font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;'>
+🔴 Urgente &nbsp;→&nbsp; recuperar venda<br>
+🟡 Atenção &nbsp;→&nbsp; acompanhar<br>
+🟢 Positivo &nbsp;→&nbsp; aumentar venda
+</div>
+""", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════
 # MÓDULO: INÍCIO
 # ══════════════════════════════════════════════════════════════
 if modulo == "🏠 Início":
+
     st.markdown("""
     <div class="app-header">
         <h1>🧭 Bússola do Representante</h1>
-        <p>Central inteligente — tudo em um só lugar.</p>
+        <p>Central inteligente — tudo em um só lugar. Selecione um módulo no menu lateral.</p>
     </div>
     """, unsafe_allow_html=True)
 
+    # ── linha de status rápido ──
+    s1, s2, s3, s4 = st.columns(4)
+    s1.metric("Módulos ativos", "2")
+    s2.metric("Radar Comercial", "✅ Online")
+    s3.metric("CotaBot", "✅ Online")
+    s4.metric("Bússola de Visitas", "🔜 Em breve")
+
+    st.divider()
+
+    # ── cards dos módulos ──
+    st.markdown("### 📦 Módulos disponíveis")
+
     col1, col2 = st.columns(2)
+
     with col1:
         st.markdown("""
-        <div class="card">
+        <div class="card" style="border-top:4px solid #0D1B2A;">
             <div class="card-icon">📡</div>
             <div class="card-title">Radar Comercial</div>
-            <div class="card-desc">Metas, GAP, prioridade de clientes e roteiro inteligente do dia.</div>
+            <div class="card-desc">
+                Faça upload da <strong>Curva Semanal</strong> e do <strong>CMK</strong> para visualizar:<br><br>
+                ✅ Meta × Realizado × Projeção<br>
+                ✅ GAP por cliente com prioridade automática<br>
+                ✅ Roteiro inteligente do dia<br>
+                ✅ Resumo por cidade<br>
+                ✅ Análise individual com abordagem sugerida
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="card" style="border-left:4px solid #C62828;">
+        <div class="card" style="border-top:4px solid #C62828;opacity:0.7;">
             <div class="card-icon">📍</div>
-            <div class="card-title">Bússola de Visitas</div>
-            <div class="card-desc">Em breve — rota otimizada e plano de ataque.</div>
+            <div class="card-title">Bússola de Visitas <span style="font-size:12px;color:#C62828;">Em breve</span></div>
+            <div class="card-desc">
+                Rota otimizada, clientes prioritários,<br>
+                plano de ataque e agenda do dia.<br><br>
+                <em>Envie o código para ativar este módulo.</em>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
-        <div class="card">
+        <div class="card" style="border-top:4px solid #1B8A3D;">
             <div class="card-icon">💰</div>
-            <div class="card-title">CotaBot</div>
-            <div class="card-desc">Upload de cotação, cruzamento por EAN e preenchimento automático de preços.</div>
+            <div class="card-title">CotaBot — Cotação</div>
+            <div class="card-desc">
+                Faça upload da <strong>Base de produtos</strong> e da <strong>Cotação do cliente</strong>:<br><br>
+                ✅ Cruzamento automático por EAN<br>
+                ✅ Preenchimento de preços automático<br>
+                ✅ Preserva o layout original do cliente<br>
+                ✅ Download do Excel pronto para envio<br>
+                ✅ Suporte a PREÇO REAL ou ST + NF
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="card" style="border-top:4px solid #F9A825;opacity:0.7;">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Cobrança Inteligente <span style="font-size:12px;color:#F9A825;">Em breve</span></div>
+            <div class="card-desc">
+                Clientes vencidos, dias em atraso,<br>
+                prioridade de cobrança e histórico.<br><br>
+                <em>Envie o código para ativar este módulo.</em>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
     st.divider()
-    st.caption("Use o menu lateral para navegar entre os módulos.")
+
+    # ── como usar ──
+    st.markdown("### 🚀 Como usar")
+    u1, u2, u3 = st.columns(3)
+    with u1:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div style="font-size:28px;">1️⃣</div>
+            <div class="card-title" style="text-align:center;">Escolha o módulo</div>
+            <div class="card-desc" style="text-align:center;">Clique em <strong>Radar Comercial</strong> ou <strong>CotaBot</strong> no menu lateral esquerdo.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with u2:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div style="font-size:28px;">2️⃣</div>
+            <div class="card-title" style="text-align:center;">Faça o upload</div>
+            <div class="card-desc" style="text-align:center;">Suba sua planilha Excel. O sistema detecta as colunas automaticamente.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with u3:
+        st.markdown("""
+        <div class="card" style="text-align:center;">
+            <div style="font-size:28px;">3️⃣</div>
+            <div class="card-title" style="text-align:center;">Tome decisões</div>
+            <div class="card-desc" style="text-align:center;">Veja prioridades, gere roteiro do dia e baixe cotações preenchidas.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.divider()
+    st.caption("🧭 Bússola do Representante — versão 2.0 | Desenvolvido para representantes farmacêuticos de alta performance.")
 
 # ══════════════════════════════════════════════════════════════
 # MÓDULO: RADAR COMERCIAL
