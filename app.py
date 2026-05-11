@@ -11,891 +11,583 @@ st.set_page_config(
     layout="wide",
 )
 
-# ── CSS GLOBAL ─────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════
+# CSS GLOBAL
+# ══════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-[data-testid="stSidebar"] { background-color: #0D1B2A; }
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span,
-[data-testid="stSidebar"] h1,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3 { color: white !important; }
-.stMetric {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E7EB;
-    padding: 14px;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(13,27,42,0.06);
+section[data-testid="stSidebar"] { display: none !important; }
+header[data-testid="stHeader"]   { display: none !important; }
+.block-container { padding-top: 0 !important; padding-bottom: 2rem; max-width: 1400px; }
+.navbar {
+    background: linear-gradient(90deg, #0D1B2A 0%, #13293D 70%, #0D1B2A 100%);
+    padding: 0 28px; display: flex; align-items: center;
+    border-bottom: 3px solid #C62828; height: 56px; margin-bottom: 0;
 }
+.navbar-brand { font-size: 17px; font-weight: 800; color: white; margin-right: 32px; white-space: nowrap; }
+.navbar-brand span { color: #C62828; }
+.kpi-card { background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 16px 18px; height: 100%; }
+.kpi-card.red   { border-left: 4px solid #C62828; }
+.kpi-card.green { border-left: 4px solid #1B8A3D; }
+.kpi-card.amber { border-left: 4px solid #F9A825; }
+.kpi-card.blue  { border-left: 4px solid #1D4ED8; }
+.kpi-card.navy  { border-left: 4px solid #0D1B2A; }
+.kpi-label { font-size: 11px; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+.kpi-value { font-size: 24px; font-weight: 800; color: #0D1B2A; line-height: 1.1; }
+.kpi-sub   { font-size: 11px; color: #94A3B8; margin-top: 3px; }
+.cli-card { background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.cli-card.urgente { border-left: 4px solid #C62828; }
+.cli-card.atencao { border-left: 4px solid #F9A825; }
+.cli-name { font-size: 13px; font-weight: 700; color: #0D1B2A; }
+.cli-sub  { font-size: 11px; color: #64748B; margin-top: 2px; }
+.badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.badge-red   { background: #FEF2F2; color: #C62828; }
+.badge-amber { background: #FFFBEB; color: #B45309; }
+.badge-green { background: #F0FDF4; color: #1B8A3D; }
+.sec-title { font-size: 14px; font-weight: 700; color: #0D1B2A; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #E5E7EB; }
+.section-card { background: white; border: 1px solid #E5E7EB; border-radius: 16px; padding: 18px; margin-bottom: 18px; }
+.app-header { background: linear-gradient(90deg,#0D1B2A 0%,#13293D 60%,#C62828 100%); padding: 20px 28px; border-radius: 16px; margin-bottom: 20px; color: white; }
+.app-header h1 { color: white; margin-bottom: 4px; font-size: 26px; }
+.app-header p  { color: #E5E7EB; font-size: 13px; margin: 0; }
 div[data-testid="stMetricLabel"] { color: #475569; font-weight: 600; }
 div[data-testid="stMetricValue"] { color: #0D1B2A; font-weight: 800; }
-.stDataFrame { border-radius: 12px; overflow: hidden; }
-button { border-radius: 10px !important; font-weight: 600 !important; }
-.app-header {
-    background: linear-gradient(90deg, #0D1B2A 0%, #13293D 60%, #C62828 100%);
-    padding: 24px 28px; border-radius: 18px; margin-bottom: 22px; color: white;
-}
-.app-header h1 { color: white; margin-bottom: 4px; font-size: 34px; }
-.app-header p  { color: #E5E7EB; font-size: 16px; margin: 0; }
-.section-card {
-    background-color: white; border: 1px solid #E5E7EB;
-    border-radius: 16px; padding: 18px; margin-bottom: 18px;
-    box-shadow: 0 2px 10px rgba(13,27,42,0.05);
-}
-.card {
-    background: white; border: 1px solid #E5E7EB; border-radius: 16px;
-    padding: 24px; margin-bottom: 12px;
-}
-.card-icon  { font-size: 32px; margin-bottom: 8px; }
-.card-title { font-size: 18px; font-weight: 700; color: #0D1B2A; margin-bottom: 4px; }
-.card-desc  { font-size: 14px; color: #64748B; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── MENU LATERAL ───────────────────────────────────────────────
-st.sidebar.markdown("## 🧭 Bússola")
-st.sidebar.markdown("---")
-modulo = st.sidebar.radio(
-    "Módulos",
-    ["🏠 Início", "📡 Radar Comercial", "💰 CotaBot — Cotação"],
-    label_visibility="collapsed"
-)
-st.sidebar.markdown("---")
-st.sidebar.markdown("""
-<div style='font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;'>
-🔴 Urgente &nbsp;→&nbsp; recuperar venda<br>
-🟡 Atenção &nbsp;→&nbsp; acompanhar<br>
-🟢 Positivo &nbsp;→&nbsp; aumentar venda
-</div>
-""", unsafe_allow_html=True)
+# ══════════════════════════════════════════════════════════════
+# ESTADO + NAVBAR
+# ══════════════════════════════════════════════════════════════
+if "pagina" not in st.session_state:
+    st.session_state["pagina"] = "dashboard"
+
+st.markdown('<div class="navbar"><div class="navbar-brand">🧭 Bússola do <span>Representante</span></div></div>', unsafe_allow_html=True)
+
+nc1,nc2,nc3,nc4,nc5,nc6 = st.columns([2.5,1.4,1.4,1.4,1.4,1.4])
+with nc2:
+    if st.button("🧭 Dashboard", use_container_width=True,
+                 type="primary" if st.session_state["pagina"]=="dashboard" else "secondary"):
+        st.session_state["pagina"]="dashboard"; st.rerun()
+with nc3:
+    if st.button("📡 Radar", use_container_width=True,
+                 type="primary" if st.session_state["pagina"]=="radar" else "secondary"):
+        st.session_state["pagina"]="radar"; st.rerun()
+with nc4:
+    if st.button("💰 CotaBot", use_container_width=True,
+                 type="primary" if st.session_state["pagina"]=="cotabot" else "secondary"):
+        st.session_state["pagina"]="cotabot"; st.rerun()
+with nc5:
+    if st.button("🧾 Cobrança", use_container_width=True,
+                 type="primary" if st.session_state["pagina"]=="cobranca" else "secondary"):
+        st.session_state["pagina"]="cobranca"; st.rerun()
+with nc6:
+    if st.button("📍 Visitas", use_container_width=True,
+                 type="primary" if st.session_state["pagina"]=="visitas" else "secondary"):
+        st.session_state["pagina"]="visitas"; st.rerun()
+
+st.markdown("<div style='margin-top:12px;'></div>", unsafe_allow_html=True)
+pagina = st.session_state["pagina"]
 
 # ══════════════════════════════════════════════════════════════
-# MÓDULO: INÍCIO
+# FUNÇÕES GLOBAIS
 # ══════════════════════════════════════════════════════════════
-if modulo == "🏠 Início":
+def _ln(txt):
+    txt = str(txt).strip().upper()
+    return unicodedata.normalize("NFKD", txt).encode("ASCII","ignore").decode("utf-8")
 
-    st.markdown("""
-    <div class="app-header">
-        <h1>🧭 Bússola do Representante</h1>
-        <p>Central inteligente — tudo em um só lugar. Selecione um módulo no menu lateral.</p>
-    </div>
-    """, unsafe_allow_html=True)
+def _num(v):
+    if pd.isna(v): return 0.0
+    if isinstance(v,(int,float)): return float(v)
+    v=str(v).strip().replace("R$","").replace("%","").replace(".","").replace(",",".")
+    try: return float(v)
+    except: return 0.0
 
-    # ── linha de status rápido ──
-    s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Módulos ativos", "2")
-    s2.metric("Radar Comercial", "✅ Online")
-    s3.metric("CotaBot", "✅ Online")
-    s4.metric("Bússola de Visitas", "🔜 Em breve")
+def _m(v):
+    try: return f"R$ {float(v):,.0f}".replace(",",".")
+    except: return "R$ 0"
 
-    st.divider()
+def _p(v):
+    try: return f"{float(v)*100:,.1f}%".replace(",","X").replace(".",",").replace("X",".")
+    except: return "0,0%"
 
-    # ── cards dos módulos ──
-    st.markdown("### 📦 Módulos disponíveis")
+def _p2(v):
+    try: return f"{float(v)*100:,.2f}%".replace(",","X").replace(".",",").replace("X",".")
+    except: return "0,00%"
 
-    col1, col2 = st.columns(2)
+def _ac(df, ops, exata=False):
+    for o in ops:
+        for c in df.columns:
+            if _ln(c)==_ln(o): return c
+    if not exata:
+        for o in ops:
+            for c in df.columns:
+                if _ln(o) in _ln(c): return c
+    return None
 
-    with col1:
-        st.markdown("""
-        <div class="card" style="border-top:4px solid #0D1B2A;">
-            <div class="card-icon">📡</div>
-            <div class="card-title">Radar Comercial</div>
-            <div class="card-desc">
-                Faça upload da <strong>Curva Semanal</strong> e do <strong>CMK</strong> para visualizar:<br><br>
-                ✅ Meta × Realizado × Projeção<br>
-                ✅ GAP por cliente com prioridade automática<br>
-                ✅ Roteiro inteligente do dia<br>
-                ✅ Resumo por cidade<br>
-                ✅ Análise individual com abordagem sugerida
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+def _prio(row):
+    if row["GAP"]>=0: return "🟢 AUMENTAR VENDA"
+    if row["PERC_GAP"]<=-0.20: return "🔴 URGENTE"
+    return "🟡 ATENÇÃO"
 
-        st.markdown("""
-        <div class="card" style="border-top:4px solid #C62828;opacity:0.7;">
-            <div class="card-icon">📍</div>
-            <div class="card-title">Bússola de Visitas <span style="font-size:12px;color:#C62828;">Em breve</span></div>
-            <div class="card-desc">
-                Rota otimizada, clientes prioritários,<br>
-                plano de ataque e agenda do dia.<br><br>
-                <em>Envie o código para ativar este módulo.</em>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+def _acao(row):
+    if row["GAP"]>=0: return "Aumentar venda"
+    if row["PERC_GAP"]<=-0.20: return "Recuperar urgente"
+    return "Acompanhar"
 
-    with col2:
-        st.markdown("""
-        <div class="card" style="border-top:4px solid #1B8A3D;">
-            <div class="card-icon">💰</div>
-            <div class="card-title">CotaBot — Cotação</div>
-            <div class="card-desc">
-                Faça upload da <strong>Base de produtos</strong> e da <strong>Cotação do cliente</strong>:<br><br>
-                ✅ Cruzamento automático por EAN<br>
-                ✅ Preenchimento de preços automático<br>
-                ✅ Preserva o layout original do cliente<br>
-                ✅ Download do Excel pronto para envio<br>
-                ✅ Suporte a PREÇO REAL ou ST + NF
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+def _cp(v):
+    if "URGENTE"  in str(v): return "background-color:#F8D7DA;color:#842029;font-weight:bold"
+    if "ATENÇÃO"  in str(v): return "background-color:#FFF3CD;color:#664D03;font-weight:bold"
+    if "AUMENTAR" in str(v): return "background-color:#D1E7DD;color:#0F5132;font-weight:bold"
+    return ""
 
-        st.markdown("""
-        <div class="card" style="border-top:4px solid #F9A825;opacity:0.7;">
-            <div class="card-icon">📊</div>
-            <div class="card-title">Cobrança Inteligente <span style="font-size:12px;color:#F9A825;">Em breve</span></div>
-            <div class="card-desc">
-                Clientes vencidos, dias em atraso,<br>
-                prioridade de cobrança e histórico.<br><br>
-                <em>Envie o código para ativar este módulo.</em>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.divider()
-
-    # ── como usar ──
-    st.markdown("### 🚀 Como usar")
-    u1, u2, u3 = st.columns(3)
-    with u1:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div style="font-size:28px;">1️⃣</div>
-            <div class="card-title" style="text-align:center;">Escolha o módulo</div>
-            <div class="card-desc" style="text-align:center;">Clique em <strong>Radar Comercial</strong> ou <strong>CotaBot</strong> no menu lateral esquerdo.</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with u2:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div style="font-size:28px;">2️⃣</div>
-            <div class="card-title" style="text-align:center;">Faça o upload</div>
-            <div class="card-desc" style="text-align:center;">Suba sua planilha Excel. O sistema detecta as colunas automaticamente.</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with u3:
-        st.markdown("""
-        <div class="card" style="text-align:center;">
-            <div style="font-size:28px;">3️⃣</div>
-            <div class="card-title" style="text-align:center;">Tome decisões</div>
-            <div class="card-desc" style="text-align:center;">Veja prioridades, gere roteiro do dia e baixe cotações preenchidas.</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.divider()
-    st.caption("🧭 Bússola do Representante — versão 2.0 | Desenvolvido para representantes farmacêuticos de alta performance.")
-
-# ══════════════════════════════════════════════════════════════
-# MÓDULO: RADAR COMERCIAL
-# ══════════════════════════════════════════════════════════════
-elif modulo == "📡 Radar Comercial":
-
-    # ── funções ──
-    def limpar_filtros():
-        for key in list(st.session_state.keys()):
-            if key.startswith("filtro_"):
-                del st.session_state[key]
-
-    def limpar_nome(txt):
-        txt = str(txt).strip().upper()
-        txt = unicodedata.normalize("NFKD", txt).encode("ASCII", "ignore").decode("utf-8")
-        return txt
-
-    def limpar_cnpj(valor):
-        return re.sub(r"\D", "", str(valor))
-
-    def numero(valor):
-        if pd.isna(valor): return 0.0
-        if isinstance(valor, (int, float)): return float(valor)
-        valor = str(valor).strip().replace("R$","").replace("%","")
-        valor = valor.replace(".", "").replace(",", ".")
-        valor = valor.replace("-", "0") if valor == "-" else valor
-        try: return float(valor)
-        except: return 0.0
-
-    def moeda(valor):
-        try: return f"R$ {float(valor):,.0f}".replace(",", ".")
-        except: return "R$ 0"
-
-    def pct(valor):
-        try: return f"{float(valor)*100:,.1f}%".replace(",","X").replace(".",",").replace("X",".")
-        except: return "0,0%"
-
-    def pct_cmv(valor):
-        try: return f"{float(valor)*100:,.2f}%".replace(",","X").replace(".",",").replace("X",".")
-        except: return "0,00%"
-
-    def achar_coluna(df, opcoes, exata=False):
-        for opcao in opcoes:
-            for col in df.columns:
-                if limpar_nome(col) == limpar_nome(opcao): return col
-        if not exata:
-            for opcao in opcoes:
-                for col in df.columns:
-                    if limpar_nome(opcao) in limpar_nome(col): return col
-        return None
-
-    def setor_limpo(valor):
-        achou = re.search(r"\d+", str(valor))
-        return achou.group() if achou else ""
-
-    def calc_prioridade(row):
-        if row["GAP"] >= 0: return "🟢 AUMENTAR VENDA"
-        if row["PERC_GAP"] <= -0.20: return "🔴 URGENTE"
-        return "🟡 ATENÇÃO"
-
-    def calc_acao(row):
-        if row["GAP"] >= 0: return "Aumentar venda"
-        if row["PERC_GAP"] <= -0.20: return "Recuperar venda urgente"
-        return "Acompanhar e recuperar venda"
-
-    def cor_prioridade(valor):
-        if "URGENTE" in str(valor): return "background-color:#F8D7DA;color:#842029;font-weight:bold"
-        if "ATENÇÃO" in str(valor): return "background-color:#FFF3CD;color:#664D03;font-weight:bold"
-        if "AUMENTAR" in str(valor): return "background-color:#D1E7DD;color:#0F5132;font-weight:bold"
-        return ""
-
-    def cor_numero(valor):
-        try:
-            v = float(valor)
-            if v < 0: return "color:#C62828;font-weight:bold"
-            if v > 0: return "color:#1B8A3D;font-weight:bold"
-        except: pass
-        return ""
-
-    def cor_prazo(valor):
-        try:
-            v = float(valor)
-            if v <= 0: return "color:#1B8A3D;font-weight:bold"
-            return "color:#C62828;font-weight:bold"
-        except: return ""
-
-    def cor_cmv(valor):
-        try:
-            v = float(valor)
-            if v <= 0: return "color:#1B8A3D;font-weight:bold"
-            return "color:#C62828;font-weight:bold"
-        except: return ""
-
-    # ── header ──
-    st.markdown("""
-    <div class="app-header">
-        <h1>📡 Radar Comercial Inteligente</h1>
-        <p>Sistema inteligente para decidir quem visitar, corrigir desvios e acelerar suas vendas.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── upload ──
-    st.markdown("## 📁 Carregar bases")
-    col_up1, col_up2 = st.columns(2)
-    with col_up1:
-        curva_file = st.file_uploader("📊 Subir Curva semanal", type=["xlsx"], key="r_curva")
-    with col_up2:
-        cmk_file = st.file_uploader("📍 Subir CMK/endereço", type=["xlsx"], key="r_cmk")
-
-    if not curva_file or not cmk_file:
-        st.info("Suba a Curva semanal e o CMK para iniciar a análise.")
-        st.stop()
-
+def _cn(v):
     try:
-        curva = pd.read_excel(curva_file, sheet_name="DADOS")
+        x=float(v)
+        if x<0: return "color:#C62828;font-weight:bold"
+        if x>0: return "color:#1B8A3D;font-weight:bold"
+    except: pass
+    return ""
+
+def carregar_curva(curva_file, cmk_file):
+    try:    curva=pd.read_excel(curva_file, sheet_name="DADOS")
+    except: curva=pd.read_excel(curva_file)
+    cmk=pd.read_excel(cmk_file)
+    curva.columns=[_ln(c) for c in curva.columns]
+    cmk.columns  =[_ln(c) for c in cmk.columns]
+
+    col_cliente=_ac(curva,["CLIENTE"],exata=True)
+    col_cnpj_c =_ac(curva,["CNPJ"],exata=True)
+    col_cnpj_m =_ac(cmk,  ["CNPJ"],exata=True)
+    col_bandeira=_ac(curva,["BANDEIRA"],exata=True)
+    col_sup    =_ac(curva,["SUPERVISOR"])
+    col_setor  =_ac(curva,["COD.SETOR","COD SETOR","SETOR"])
+    col_meta   =_ac(curva,["META"],exata=True)
+    col_real   =_ac(curva,["REAL"],exata=True)
+    col_proj   =_ac(curva,["REAL PROJ","REAL PROJ AC"])
+    col_gap    =_ac(curva,["DESVIO PROJ"],exata=True)
+    col_perc   =_ac(curva,["% DESVIO"],exata=True)
+    col_2025   =_ac(curva,["2025"],exata=True)
+    col_cresc  =_ac(curva,["% CRESC PROJ","% CRESC PROJ AC","CRESC"])
+    col_mpv    =_ac(curva,["META PV"])
+    col_pven   =_ac(curva,["P.VEN","P VEN","PVEN"])
+    col_dpv    =_ac(curva,["DESVIO PV"])
+    col_mcmv   =_ac(curva,["META CMV %","META CMV"])
+    col_cmvr   =_ac(curva,["CMV %","CMV REAL","CMV"])
+    col_dcmv   =_ac(curva,["DESVIO CMV"])
+
+    df=curva.copy()
+    df["META"]       =df[col_meta].apply(_num)   if col_meta   else 0
+    df["REALIZADO"]  =df[col_real].apply(_num)   if col_real   else 0
+    df["PROJECAO"]   =df[col_proj].apply(_num)   if col_proj   else 0
+    df["GAP"]        =df[col_gap].apply(_num)    if col_gap    else df["PROJECAO"]-df["META"]
+    df["PERC_GAP"]   =df[col_perc].apply(_num)   if col_perc   else 0
+    df["VALOR_2025"] =df[col_2025].apply(_num)   if col_2025   else 0
+    df["CRESCIMENTO"]=df[col_cresc].apply(_num)  if col_cresc  else 0
+    df["META_PV"]    =df[col_mpv].apply(_num)    if col_mpv    else 0
+    df["PRAZO_REAL"] =df[col_pven].apply(_num)   if col_pven   else 0
+    df["DESVIO_PRAZO"]=df[col_dpv].apply(_num)   if col_dpv    else 0
+    df["META_CMV"]   =df[col_mcmv].apply(_num)   if col_mcmv   else 0
+    df["CMV_REAL"]   =df[col_cmvr].apply(_num)   if col_cmvr   else 0
+    df["DESVIO_CMV"] =df[col_dcmv].apply(_num)   if col_dcmv   else 0
+
+    df["CLIENTE_FINAL"] =df[col_cliente].astype(str).str.strip() if col_cliente else "SEM NOME"
+    df["BANDEIRA_FINAL"]=df[col_bandeira].astype(str).str.strip() if col_bandeira else ""
+    df["SETOR_FINAL"]   =df[col_setor].apply(lambda v: (re.search(r"\d+",str(v)) or type("",(),{"group":lambda s,*a:""})()).group()) if col_setor else ""
+
+    if col_cnpj_c and col_cnpj_m:
+        df["_CNPJ_"] =df[col_cnpj_c].apply(lambda v: re.sub(r"\D","",str(v)))
+        cmk["_CNPJ_"]=cmk[col_cnpj_m].apply(lambda v: re.sub(r"\D","",str(v)))
+        col_cid=_ac(cmk,["MUNICIPIO","CIDADE","CITY"])
+        col_end=_ac(cmk,["ENDERECO","ENDEREÇO","END","LOGRADOURO"])
+        campos={"_CNPJ_":"_CNPJ_"}
+        if col_cid: campos[col_cid]="CIDADE"
+        if col_end: campos[col_end]="ENDERECO"
+        cmk_m=cmk[list(campos.keys())].drop_duplicates("_CNPJ_").rename(columns=campos)
+        df=df.merge(cmk_m,on="_CNPJ_",how="left")
+    if "CIDADE"   not in df.columns: df["CIDADE"]=""
+    if "ENDERECO" not in df.columns: df["ENDERECO"]=""
+
+    df["PRIORIDADE"]=df.apply(_prio,axis=1)
+    df["ACAO"]      =df.apply(_acao,axis=1)
+    ordem={"🔴 URGENTE":1,"🟡 ATENÇÃO":2,"🟢 AUMENTAR VENDA":3}
+    df["ORDEM"]=df["PRIORIDADE"].map(ordem).fillna(9)
+    df=df.sort_values(["ORDEM","GAP"],ascending=[True,True])
+    return df, col_sup
+
+# ══════════════════════════════════════════════════════════════
+# DASHBOARD
+# ══════════════════════════════════════════════════════════════
+if pagina=="dashboard":
+    try:
+        import plotly.graph_objects as go
+        HAS_PLOTLY=True
     except:
-        curva = pd.read_excel(curva_file)
-    cmk = pd.read_excel(cmk_file)
+        HAS_PLOTLY=False
 
-    curva.columns = [limpar_nome(c) for c in curva.columns]
-    cmk.columns  = [limpar_nome(c) for c in cmk.columns]
+    with st.expander("📁 Carregar dados do setor", expanded="df_dash" not in st.session_state):
+        u1,u2=st.columns(2)
+        with u1: curva_f=st.file_uploader("📊 Curva Semanal (.xlsx)",type=["xlsx"],key="d_curva")
+        with u2: cmk_f  =st.file_uploader("📍 CMK / Endereço (.xlsx)",type=["xlsx"],key="d_cmk")
+        if curva_f and cmk_f:
+            df_d,cs_d=carregar_curva(curva_f,cmk_f)
+            st.session_state["df_dash"]=df_d
+            st.session_state["cs_dash"]=cs_d
+            st.success("✅ Dados carregados!")
 
-    col_cliente      = achar_coluna(curva, ["CLIENTE"], exata=True)
-    col_cnpj_curva   = achar_coluna(curva, ["CNPJ"], exata=True)
-    col_cnpj_cmk     = achar_coluna(cmk,   ["CNPJ"], exata=True)
-    col_bandeira     = achar_coluna(curva, ["BANDEIRA"], exata=True)
-    col_supervisor   = achar_coluna(curva, ["SUPERVISOR"])
-    col_setor        = achar_coluna(curva, ["COD.SETOR","COD SETOR","SETOR"])
-    col_meta         = achar_coluna(curva, ["META"], exata=True)
-    col_real         = achar_coluna(curva, ["REAL"], exata=True)
-    col_proj         = achar_coluna(curva, ["REAL PROJ","REAL PROJ AC"])
-    col_gap_planilha = achar_coluna(curva, ["DESVIO PROJ"], exata=True)
-    col_perc_gap     = achar_coluna(curva, ["% DESVIO"], exata=True)
-    col_2025         = achar_coluna(curva, ["2025"], exata=True)
-    col_cresc        = achar_coluna(curva, ["% CRESC PROJ","% CRESC PROJ AC","CRESC"])
-    col_meta_pv      = achar_coluna(curva, ["META PV"])
-    col_pven         = achar_coluna(curva, ["P.VEN","P VEN","PVEN"])
-    col_desvio_pv    = achar_coluna(curva, ["DESVIO PV"])
-    col_meta_cmv     = achar_coluna(curva, ["META CMV %","META CMV"])
-    col_cmv_real     = achar_coluna(curva, ["CMV %","CMV REAL","CMV"])
-    col_desvio_cmv   = achar_coluna(curva, ["DESVIO CMV"])
-
-    df = curva.copy()
-    df["META"]      = df[col_meta].apply(numero)      if col_meta      else 0
-    df["REALIZADO"] = df[col_real].apply(numero)      if col_real      else 0
-    df["PROJECAO"]  = df[col_proj].apply(numero)      if col_proj      else 0
-    df["GAP"]       = df[col_gap_planilha].apply(numero) if col_gap_planilha else df["PROJECAO"] - df["META"]
-    df["PERC_GAP"]  = df[col_perc_gap].apply(numero)  if col_perc_gap  else 0
-    df["VALOR_2025"]  = df[col_2025].apply(numero)    if col_2025      else 0
-    df["CRESCIMENTO"] = df[col_cresc].apply(numero)   if col_cresc     else 0
-    df["META_PV"]     = df[col_meta_pv].apply(numero) if col_meta_pv   else 0
-    df["PRAZO_REAL"]  = df[col_pven].apply(numero)    if col_pven      else 0
-    df["DESVIO_PRAZO"]= df[col_desvio_pv].apply(numero) if col_desvio_pv else 0
-    df["META_CMV"]    = df[col_meta_cmv].apply(numero) if col_meta_cmv  else 0
-    df["CMV_REAL"]    = df[col_cmv_real].apply(numero) if col_cmv_real  else 0
-    df["DESVIO_CMV"]  = df[col_desvio_cmv].apply(numero) if col_desvio_cmv else 0
-
-    df["CLIENTE_FINAL"]  = df[col_cliente].astype(str).str.strip() if col_cliente else "SEM NOME"
-    df["BANDEIRA_FINAL"] = df[col_bandeira].astype(str).str.strip() if col_bandeira else ""
-    df["SETOR_FINAL"]    = df[col_setor].apply(setor_limpo) if col_setor else ""
-
-    if col_cnpj_curva and col_cnpj_cmk:
-        df["_CNPJ_"]   = df[col_cnpj_curva].apply(limpar_cnpj)
-        cmk["_CNPJ_"]  = cmk[col_cnpj_cmk].apply(limpar_cnpj)
-        col_cidade_cmk  = achar_coluna(cmk, ["MUNICIPIO","CIDADE","CITY"])
-        col_end_cmk     = achar_coluna(cmk, ["ENDERECO","ENDEREÇO","END","LOGRADOURO"])
-        campos = {"_CNPJ_": "_CNPJ_"}
-        if col_cidade_cmk: campos[col_cidade_cmk] = "CIDADE"
-        if col_end_cmk:    campos[col_end_cmk]    = "ENDERECO"
-        cmk_merge = cmk[list(campos.keys())].drop_duplicates("_CNPJ_")
-        cmk_merge = cmk_merge.rename(columns=campos)
-        df = df.merge(cmk_merge, on="_CNPJ_", how="left")
-    if "CIDADE"   not in df.columns: df["CIDADE"]   = ""
-    if "ENDERECO" not in df.columns: df["ENDERECO"] = ""
-
-    df["PRIORIDADE"] = df.apply(calc_prioridade, axis=1)
-    df["ACAO"]       = df.apply(calc_acao, axis=1)
-
-    # ── filtros sidebar ──
-    st.sidebar.markdown("## 📡 Radar Comercial")
-    st.sidebar.caption("Filtros de decisão")
-    if st.sidebar.button("🔄 Limpar filtros", key="r_limpar"):
-        limpar_filtros()
-
-    busca = st.sidebar.text_input("Buscar cliente", key="filtro_busca")
-    if busca:
-        df = df[df["CLIENTE_FINAL"].str.contains(busca, case=False, na=False)]
-
-    if col_supervisor:
-        supervisores = ["Todos"] + sorted(df[col_supervisor].dropna().astype(str).unique().tolist())
-        f_sup = st.sidebar.selectbox("Supervisor", supervisores, key="filtro_supervisor")
-        if f_sup != "Todos":
-            df = df[df[col_supervisor].astype(str) == f_sup]
-
-    setores = ["Todos"] + sorted(df["SETOR_FINAL"].dropna().astype(str).unique().tolist())
-    f_setor = st.sidebar.selectbox("Setor", setores, key="filtro_setor")
-    if f_setor != "Todos":
-        df = df[df["SETOR_FINAL"] == f_setor]
-
-    bandeiras = ["Todas"] + sorted(df["BANDEIRA_FINAL"].dropna().astype(str).unique().tolist())
-    f_bandeira = st.sidebar.selectbox("Bandeira", bandeiras, key="filtro_bandeira")
-    if f_bandeira != "Todas":
-        df = df[df["BANDEIRA_FINAL"] == f_bandeira]
-
-    cidades = ["Todas"] + sorted(df["CIDADE"].dropna().astype(str).unique().tolist())
-    f_cidade = st.sidebar.selectbox("Cidade", cidades, key="filtro_cidade")
-    if f_cidade != "Todas":
-        df = df[df["CIDADE"].astype(str) == f_cidade]
-
-    prioridades_opts = ["Todas","🔴 URGENTE","🟡 ATENÇÃO","🟢 AUMENTAR VENDA"]
-    f_prio = st.sidebar.selectbox("Prioridade", prioridades_opts, key="filtro_prioridade")
-    if f_prio != "Todas":
-        df = df[df["PRIORIDADE"] == f_prio]
-
-    if df.empty:
-        st.warning("Nenhum cliente encontrado com os filtros aplicados.")
+    if "df_dash" not in st.session_state:
+        st.markdown("""
+        <div style="background:#F8FAFC;border:2px dashed #CBD5E1;border-radius:16px;
+                    padding:60px;text-align:center;margin-top:20px;">
+            <div style="font-size:52px;margin-bottom:12px;">🧭</div>
+            <div style="font-size:22px;font-weight:800;color:#0D1B2A;margin-bottom:8px;">Bússola do Representante</div>
+            <div style="font-size:14px;color:#64748B;">
+                Abra o painel acima e suba a <strong>Curva Semanal</strong> + <strong>CMK</strong>
+                para ver o dashboard completo do seu setor.
+            </div>
+        </div>""", unsafe_allow_html=True)
         st.stop()
 
-    ordem = {"🔴 URGENTE":1,"🟡 ATENÇÃO":2,"🟢 AUMENTAR VENDA":3}
-    df["ORDEM"] = df["PRIORIDADE"].map(ordem).fillna(9)
-    df = df.sort_values(by=["ORDEM","GAP"], ascending=[True,True])
+    df=st.session_state["df_dash"]
+    total    =len(df)
+    urgentes =len(df[df["PRIORIDADE"]=="🔴 URGENTE"])
+    atencao  =len(df[df["PRIORIDADE"]=="🟡 ATENÇÃO"])
+    positivos=len(df[df["PRIORIDADE"]=="🟢 AUMENTAR VENDA"])
+    meta_t   =df["META"].sum()
+    real_t   =df["REALIZADO"].sum()
+    proj_t   =df["PROJECAO"].sum()
+    gap_t    =df["GAP"].sum()
+    pct_meta =(real_t/meta_t*100) if meta_t>0 else 0
 
-    # ── dashboard ──
-    st.markdown("## 📊 Visão Executiva")
-    c1,c2,c3,c4,c5 = st.columns(5)
-    c1.metric("Clientes analisados", len(df))
-    c2.metric("Clientes positivos", len(df[df["GAP"]>=0]))
-    c3.metric("Clientes negativos", len(df[df["GAP"]<0]))
-    c4.metric("Urgentes", len(df[df["PRIORIDADE"]=="🔴 URGENTE"]))
-    urgentes = df[df["PRIORIDADE"]=="🔴 URGENTE"]
-    if not urgentes.empty:
-        cidade_critica = urgentes["CIDADE"].value_counts().idxmax()
-        qtd_cidade     = urgentes["CIDADE"].value_counts().max()
-        c5.metric("Cidade crítica", f"{cidade_critica} ({qtd_cidade})")
+    # KPIs
+    k1,k2,k3,k4,k5=st.columns(5)
+    with k1: st.markdown(f'<div class="kpi-card navy"><div class="kpi-label">Meta total</div><div class="kpi-value">{_m(meta_t)}</div><div class="kpi-sub">{total} clientes</div></div>',unsafe_allow_html=True)
+    with k2: st.markdown(f'<div class="kpi-card green"><div class="kpi-label">Realizado</div><div class="kpi-value">{_m(real_t)}</div><div class="kpi-sub">{pct_meta:.1f}% da meta</div></div>',unsafe_allow_html=True)
+    with k3: st.markdown(f'<div class="kpi-card blue"><div class="kpi-label">Projeção</div><div class="kpi-value">{_m(proj_t)}</div><div class="kpi-sub">até fim do mês</div></div>',unsafe_allow_html=True)
+    cor_g="red" if gap_t<0 else "green"
+    with k4: st.markdown(f'<div class="kpi-card {cor_g}"><div class="kpi-label">GAP total</div><div class="kpi-value">{_m(gap_t)}</div><div class="kpi-sub">{"déficit" if gap_t<0 else "superávit"}</div></div>',unsafe_allow_html=True)
+    with k5: st.markdown(f'<div class="kpi-card red"><div class="kpi-label">🔴 Urgentes</div><div class="kpi-value">{urgentes}</div><div class="kpi-sub">{atencao} em atenção</div></div>',unsafe_allow_html=True)
+
+    st.markdown("<div style='margin-top:10px;'></div>",unsafe_allow_html=True)
+
+    if HAS_PLOTLY:
+        import plotly.graph_objects as go
+
+        g1,g2=st.columns([1.4,1])
+        with g1:
+            st.markdown("<div class='sec-title'>📊 Faturamento do mês vs meta</div>",unsafe_allow_html=True)
+            fig=go.Figure()
+            fig.add_bar(name="Meta",      x=["Meta"],      y=[meta_t], marker_color="#0D1B2A")
+            fig.add_bar(name="Realizado", x=["Realizado"], y=[real_t], marker_color="#1B8A3D")
+            fig.add_bar(name="Projeção",  x=["Projeção"],  y=[proj_t], marker_color="#1D4ED8")
+            fig.update_layout(height=250,margin=dict(l=0,r=0,t=8,b=0),
+                plot_bgcolor="white",paper_bgcolor="white",showlegend=True,
+                legend=dict(orientation="h",y=-0.2),bargap=0.35,
+                yaxis=dict(tickprefix="R$ ",tickformat=",.0f",gridcolor="#F1F5F9"))
+            st.plotly_chart(fig,use_container_width=True)
+
+        with g2:
+            st.markdown("<div class='sec-title'>🎯 Prioridades do setor</div>",unsafe_allow_html=True)
+            fig2=go.Figure(go.Pie(
+                labels=["🔴 Urgente","🟡 Atenção","🟢 Positivo"],
+                values=[urgentes,atencao,positivos],
+                marker_colors=["#C62828","#F9A825","#1B8A3D"],
+                hole=0.48, textinfo="label+percent", textfont_size=12,
+            ))
+            fig2.update_layout(height=250,margin=dict(l=0,r=0,t=8,b=0),
+                paper_bgcolor="white",showlegend=False)
+            st.plotly_chart(fig2,use_container_width=True)
+
+        g3,g4=st.columns([1,1.4])
+        with g3:
+            st.markdown("<div class='sec-title'>📍 GAP por cidade</div>",unsafe_allow_html=True)
+            rc=df.groupby("CIDADE").agg(GAP_TOTAL=("GAP","sum")).reset_index()
+            rc=rc[rc["CIDADE"].astype(str).str.strip()!=""].sort_values("GAP_TOTAL").tail(12)
+            cores=["#C62828" if v<0 else "#1B8A3D" for v in rc["GAP_TOTAL"]]
+            fig3=go.Figure(go.Bar(
+                x=rc["GAP_TOTAL"],y=rc["CIDADE"],orientation="h",
+                marker_color=cores,
+                text=[_m(v) for v in rc["GAP_TOTAL"]],
+                textposition="outside",textfont=dict(size=10),
+            ))
+            fig3.update_layout(height=300,margin=dict(l=0,r=70,t=8,b=0),
+                plot_bgcolor="white",paper_bgcolor="white",
+                xaxis=dict(tickprefix="R$ ",tickformat=",.0f",gridcolor="#F1F5F9"),
+                yaxis=dict(tickfont=dict(size=11)))
+            st.plotly_chart(fig3,use_container_width=True)
+
+        with g4:
+            st.markdown("<div class='sec-title'>📈 Real vs projeção — top 10 clientes</div>",unsafe_allow_html=True)
+            top=df.nlargest(10,"META")[["CLIENTE_FINAL","REALIZADO","PROJECAO"]].copy()
+            top["CLIENTE_FINAL"]=top["CLIENTE_FINAL"].str[:18]
+            fig4=go.Figure()
+            fig4.add_bar(name="Realizado",x=top["CLIENTE_FINAL"],y=top["REALIZADO"],marker_color="#1B8A3D")
+            fig4.add_bar(name="Projeção", x=top["CLIENTE_FINAL"],y=top["PROJECAO"], marker_color="#1D4ED8",opacity=0.75)
+            fig4.update_layout(height=300,margin=dict(l=0,r=0,t=8,b=70),
+                plot_bgcolor="white",paper_bgcolor="white",barmode="group",
+                showlegend=True,legend=dict(orientation="h",y=-0.35),
+                yaxis=dict(tickprefix="R$ ",tickformat=",.0f",gridcolor="#F1F5F9"),
+                xaxis=dict(tickangle=-35,tickfont=dict(size=10)))
+            st.plotly_chart(fig4,use_container_width=True)
     else:
-        c5.metric("Cidade crítica", "-")
+        st.warning("Adicione 'plotly' no requirements.txt para ver os gráficos.")
 
-    m1,m2,m3,m4 = st.columns(4)
-    m1.metric("Meta total",  moeda(df["META"].sum()))
-    m2.metric("Realizado",   moeda(df["REALIZADO"].sum()))
-    m3.metric("Projeção",    moeda(df["PROJECAO"].sum()))
-    m4.metric("Gap total",   moeda(df["GAP"].sum()))
+    # Clientes prioritários
+    p1,p2=st.columns(2)
+    with p1:
+        st.markdown("<div class='sec-title'>🔴 Urgentes — ação imediata</div>",unsafe_allow_html=True)
+        df_urg=df[df["PRIORIDADE"]=="🔴 URGENTE"].head(8)
+        if df_urg.empty: st.success("Nenhum cliente urgente!")
+        for _,row in df_urg.iterrows():
+            st.markdown(f"""<div class="cli-card urgente">
+                <div><div class="cli-name">{row["CLIENTE_FINAL"]}</div>
+                <div class="cli-sub">{row.get("CIDADE","")} · GAP: {_m(row["GAP"])} · {_p(row["PERC_GAP"])}</div></div>
+                <span class="badge badge-red">Urgente</span></div>""",unsafe_allow_html=True)
+
+    with p2:
+        st.markdown("<div class='sec-title'>🟡 Atenção — acompanhar hoje</div>",unsafe_allow_html=True)
+        df_ate=df[df["PRIORIDADE"]=="🟡 ATENÇÃO"].head(8)
+        if df_ate.empty: st.success("Nenhum em atenção.")
+        for _,row in df_ate.iterrows():
+            st.markdown(f"""<div class="cli-card atencao">
+                <div><div class="cli-name">{row["CLIENTE_FINAL"]}</div>
+                <div class="cli-sub">{row.get("CIDADE","")} · GAP: {_m(row["GAP"])} · {_p(row["PERC_GAP"])}</div></div>
+                <span class="badge badge-amber">Atenção</span></div>""",unsafe_allow_html=True)
+
+    # Roteiro do dia
+    st.markdown("<div class='sec-title'>🚀 Roteiro do dia — top 5 prioridades</div>",unsafe_allow_html=True)
+    roteiro=pd.concat([df[df["PRIORIDADE"]=="🔴 URGENTE"].head(3),df[df["PRIORIDADE"]=="🟡 ATENÇÃO"].head(2)])
+    if not roteiro.empty:
+        cols=st.columns(min(len(roteiro),5))
+        for i,(_,row) in enumerate(roteiro.iterrows()):
+            with cols[i]:
+                cor="#FEF2F2" if "URGENTE" in row["PRIORIDADE"] else "#FFFBEB"
+                brd="#C62828" if "URGENTE" in row["PRIORIDADE"] else "#F9A825"
+                st.markdown(f"""<div style="background:{cor};border:1px solid {brd};border-radius:12px;
+                    padding:14px;text-align:center;">
+                    <div style="font-size:11px;font-weight:700;color:#64748B;">#{i+1}</div>
+                    <div style="font-size:13px;font-weight:800;color:#0D1B2A;margin:4px 0;">{row["CLIENTE_FINAL"][:20]}</div>
+                    <div style="font-size:11px;color:#64748B;">{row.get("CIDADE","")}</div>
+                    <div style="font-size:14px;font-weight:700;color:{brd};margin-top:6px;">{_m(row["GAP"])}</div>
+                    <div style="font-size:10px;color:#94A3B8;margin-top:3px;">{row["ACAO"]}</div>
+                </div>""",unsafe_allow_html=True)
+
+# ══════════════════════════════════════════════════════════════
+# RADAR COMERCIAL
+# ══════════════════════════════════════════════════════════════
+elif pagina=="radar":
+    st.markdown('<div class="app-header"><h1>📡 Radar Comercial Inteligente</h1><p>Análise completa — metas, GAP, prioridade e roteiro.</p></div>',unsafe_allow_html=True)
+    u1,u2=st.columns(2)
+    with u1: curva_f=st.file_uploader("📊 Curva Semanal",type=["xlsx"],key="r_curva")
+    with u2: cmk_f  =st.file_uploader("📍 CMK",         type=["xlsx"],key="r_cmk")
+    if not curva_f or not cmk_f: st.info("Suba a Curva Semanal e o CMK."); st.stop()
+
+    df,col_sup=carregar_curva(curva_f,cmk_f)
+    f1,f2,f3,f4=st.columns(4)
+    with f1: busca =st.text_input("🔍 Cliente",key="r_busca")
+    with f2:
+        cids=["Todas"]+sorted(df["CIDADE"].dropna().astype(str).unique().tolist())
+        f_cid=st.selectbox("Cidade",cids,key="r_cid")
+    with f3:
+        f_prio=st.selectbox("Prioridade",["Todas","🔴 URGENTE","🟡 ATENÇÃO","🟢 AUMENTAR VENDA"],key="r_prio")
+    with f4:
+        if col_sup:
+            sups=["Todos"]+sorted(df[col_sup].dropna().astype(str).unique().tolist())
+            f_sup=st.selectbox("Supervisor",sups,key="r_sup")
+        else: f_sup="Todos"
+
+    if busca: df=df[df["CLIENTE_FINAL"].str.contains(busca,case=False,na=False)]
+    if f_cid!="Todas": df=df[df["CIDADE"].astype(str)==f_cid]
+    if f_prio!="Todas": df=df[df["PRIORIDADE"]==f_prio]
+    if col_sup and f_sup!="Todos": df=df[df[col_sup].astype(str)==f_sup]
+    if df.empty: st.warning("Nenhum cliente."); st.stop()
+
+    c1,c2,c3,c4,c5=st.columns(5)
+    c1.metric("Clientes",len(df)); c2.metric("Positivos",len(df[df["GAP"]>=0]))
+    c3.metric("Negativos",len(df[df["GAP"]<0])); c4.metric("Urgentes",len(df[df["PRIORIDADE"]=="🔴 URGENTE"]))
+    c5.metric("Meta",_m(df["META"].sum()))
+    m1,m2,m3,m4=st.columns(4)
+    m1.metric("Realizado",_m(df["REALIZADO"].sum())); m2.metric("Projeção",_m(df["PROJECAO"].sum()))
+    m3.metric("GAP",_m(df["GAP"].sum()))
+    crit=df[df["PRIORIDADE"]=="🔴 URGENTE"]["CIDADE"].value_counts()
+    m4.metric("Cidade crítica",crit.idxmax() if not crit.empty else "-")
     st.divider()
 
-    # ── tabela principal ──
-    st.markdown("## 🧭 Base Completa de Decisão")
-    st.caption("Use esta visão para priorizar clientes, cidades e ações comerciais.")
-
-    tabela = df[["CLIENTE_FINAL","CIDADE","PRIORIDADE","META","REALIZADO","PROJECAO",
-                 "GAP","PERC_GAP","VALOR_2025","CRESCIMENTO","META_PV","PRAZO_REAL",
-                 "DESVIO_PRAZO","META_CMV","CMV_REAL","DESVIO_CMV","ACAO"]].copy()
-    tabela.columns = ["CLIENTE","CIDADE","PRIORIDADE","META R$","REALIZADO R$","PROJEÇÃO R$",
-                      "GAP R$","% GAP","2025 R$","CRESC. VS 2025","META PV","PRAZO REAL",
-                      "DESVIO PRAZO","META CMV","CMV REAL","DESVIO CMV","AÇÃO"]
-
-    style = tabela.style.format({
-        "META R$": moeda, "REALIZADO R$": moeda, "PROJEÇÃO R$": moeda, "GAP R$": moeda,
-        "% GAP": pct, "2025 R$": moeda, "CRESC. VS 2025": pct,
-        "META PV": "{:.1f}", "PRAZO REAL": "{:.1f}", "DESVIO PRAZO": "{:.1f}",
-        "META CMV": pct_cmv, "CMV REAL": pct_cmv, "DESVIO CMV": pct_cmv,
-    }).applymap(cor_prioridade, subset=["PRIORIDADE"]) \
-      .applymap(cor_numero, subset=["GAP R$","CRESC. VS 2025"]) \
-      .applymap(cor_prazo,  subset=["DESVIO PRAZO"]) \
-      .applymap(cor_cmv,    subset=["DESVIO CMV"])
-
-    st.dataframe(style, use_container_width=True, hide_index=True, height=520)
+    tabela=df[["CLIENTE_FINAL","CIDADE","PRIORIDADE","META","REALIZADO","PROJECAO","GAP","PERC_GAP","VALOR_2025","CRESCIMENTO","ACAO"]].copy()
+    tabela.columns=["CLIENTE","CIDADE","PRIORIDADE","META R$","REALIZADO R$","PROJEÇÃO R$","GAP R$","% GAP","2025 R$","CRESC.","AÇÃO"]
+    st.dataframe(tabela.style.format({"META R$":_m,"REALIZADO R$":_m,"PROJEÇÃO R$":_m,"GAP R$":_m,"% GAP":_p,"2025 R$":_m,"CRESC.":_p})
+        .applymap(_cp,subset=["PRIORIDADE"]).applymap(_cn,subset=["GAP R$","CRESC."]),
+        use_container_width=True,hide_index=True,height=480)
     st.divider()
 
-    # ── roteiro ──
-    st.markdown("## 📍 Roteiro Inteligente do Dia")
-    st.caption("Gera uma sugestão de rota com os clientes mais importantes para visitar primeiro.")
-
-    if st.button("🚀 Gerar roteiro do dia", key="r_roteiro"):
-        df_urg = df[df["PRIORIDADE"]=="🔴 URGENTE"].copy().sort_values(by=["CIDADE","GAP"])
-        df_ate = df[df["PRIORIDADE"]=="🟡 ATENÇÃO"].copy().sort_values(by=["CIDADE","GAP"])
-        roteiro = pd.concat([df_urg, df_ate]).head(10)
-
-        if roteiro.empty:
-            st.warning("Nenhum cliente urgente ou em atenção encontrado para hoje.")
+    if st.button("🚀 Gerar roteiro do dia",key="r_rot"):
+        rot=pd.concat([df[df["PRIORIDADE"]=="🔴 URGENTE"].sort_values(["CIDADE","GAP"]),
+                       df[df["PRIORIDADE"]=="🟡 ATENÇÃO"].sort_values(["CIDADE","GAP"])]).head(10)
+        if rot.empty: st.warning("Nenhum urgente ou em atenção.")
         else:
-            st.success("Roteiro gerado com sucesso!")
-            for cidade in roteiro["CIDADE"].dropna().unique():
-                bloco = roteiro[roteiro["CIDADE"]==cidade]
-                st.markdown(f"### 📍 {cidade}")
-                for i, row in enumerate(bloco.itertuples(), start=1):
-                    st.markdown(f"""
-**{i}. {row.CLIENTE_FINAL}**  
-Prioridade: **{row.PRIORIDADE}**  
-Gap: **{moeda(row.GAP)}**  
-% Gap: **{pct(row.PERC_GAP)}**  
-Ação: **{row.ACAO}**
-""")
-
-    # ── resumo por cidade ──
+            st.success("Roteiro gerado!")
+            for cid in rot["CIDADE"].dropna().unique():
+                b=rot[rot["CIDADE"]==cid]; st.markdown(f"#### 📍 {cid}")
+                for i,row in enumerate(b.itertuples(),1):
+                    st.markdown(f"**{i}. {row.CLIENTE_FINAL}** · {row.PRIORIDADE} · GAP: {_m(row.GAP)} · {row.ACAO}")
     st.divider()
-    st.markdown("## 📍 Resumo por Cidade")
 
-    resumo_cidade = df.groupby("CIDADE", dropna=False).agg(
-        CLIENTES=("CLIENTE_FINAL","count"),
-        POSITIVOS=("GAP", lambda x: (x>=0).sum()),
-        NEGATIVOS=("GAP", lambda x: (x<0).sum()),
-        URGENTES=("PRIORIDADE", lambda x: (x=="🔴 URGENTE").sum()),
-        ATENCAO=("PRIORIDADE",  lambda x: (x=="🟡 ATENÇÃO").sum()),
-        META_TOTAL=("META","sum"), REALIZADO=("REALIZADO","sum"),
-        PROJECAO=("PROJECAO","sum"), GAP_TOTAL=("GAP","sum"),
-    ).reset_index().sort_values(by=["URGENTES","ATENCAO","GAP_TOTAL"], ascending=[False,False,True])
-
-    resumo_style = resumo_cidade.style.format({
-        "META_TOTAL": moeda, "REALIZADO": moeda, "PROJECAO": moeda, "GAP_TOTAL": moeda,
-    }).applymap(cor_numero, subset=["GAP_TOTAL"])
-
-    st.dataframe(resumo_style, use_container_width=True, hide_index=True)
-
-    # ── análise individual ──
+    res=df.groupby("CIDADE",dropna=False).agg(
+        CLIENTES=("CLIENTE_FINAL","count"),URGENTES=("PRIORIDADE",lambda x:(x=="🔴 URGENTE").sum()),
+        ATENCAO=("PRIORIDADE",lambda x:(x=="🟡 ATENÇÃO").sum()),
+        META=("META","sum"),REALIZADO=("REALIZADO","sum"),PROJECAO=("PROJECAO","sum"),GAP=("GAP","sum"),
+    ).reset_index().sort_values(["URGENTES","GAP"],ascending=[False,True])
+    st.dataframe(res.style.format({"META":_m,"REALIZADO":_m,"PROJECAO":_m,"GAP":_m}).applymap(_cn,subset=["GAP"]),
+        use_container_width=True,hide_index=True)
     st.divider()
-    st.markdown("## 🎯 Resumo Objetivo do Cliente")
 
-    cliente_escolhido = st.selectbox("Escolha o cliente", df["CLIENTE_FINAL"].astype(str).unique(), key="r_cliente")
-    d = df[df["CLIENTE_FINAL"].astype(str)==cliente_escolhido].iloc[0]
-
-    r1,r2,r3,r4 = st.columns(4)
-    r1.metric("Meta",      moeda(d["META"]))
-    r2.metric("Realizado", moeda(d["REALIZADO"]))
-    r3.metric("Projeção",  moeda(d["PROJECAO"]))
-    r4.metric("Gap",       moeda(d["GAP"]))
-
-    st.markdown(f"""
-<div class="section-card">
-
-### 🏪 {d["CLIENTE_FINAL"]}
-
-**Bandeira:** {d["BANDEIRA_FINAL"]}  
-**Cidade:** {d.get("CIDADE", "")}  
-**Endereço:** {d.get("ENDERECO", "")}  
-
-**Prioridade:** {d["PRIORIDADE"]}  
-**Ação sugerida:** {d["ACAO"]}  
-
+    cli=st.selectbox("🎯 Análise individual",df["CLIENTE_FINAL"].astype(str).unique(),key="r_cli")
+    d=df[df["CLIENTE_FINAL"].astype(str)==cli].iloc[0]
+    r1,r2,r3,r4=st.columns(4)
+    r1.metric("Meta",_m(d["META"])); r2.metric("Realizado",_m(d["REALIZADO"]))
+    r3.metric("Projeção",_m(d["PROJECAO"])); r4.metric("GAP",_m(d["GAP"]))
+    st.markdown(f"""<div class="section-card">
+**{d["CLIENTE_FINAL"]}** · {d["BANDEIRA_FINAL"]} · {d.get("CIDADE","")}
+**Prioridade:** {d["PRIORIDADE"]} · **Ação:** {d["ACAO"]}
 ---
-
-### 📌 Leitura simples
-
-- Meta do mês: **{moeda(d["META"])}**
-- Realizado até agora: **{moeda(d["REALIZADO"])}**
-- Projeção: **{moeda(d["PROJECAO"])}**
-- Gap: **{moeda(d["GAP"])}**
-- % Gap: **{pct(d["PERC_GAP"])}**
-- Valor 2025: **{moeda(d["VALOR_2025"])}**
-- Crescimento vs 2025: **{pct(d["CRESCIMENTO"])}**
-- Prazo: meta **{d["META_PV"]:.1f} dias**, realizado **{d["PRAZO_REAL"]:.1f} dias**, desvio **{d["DESVIO_PRAZO"]:.1f} dias**
-- CMV: meta **{pct_cmv(d["META_CMV"])}**, realizado **{pct_cmv(d["CMV_REAL"])}**, desvio **{pct_cmv(d["DESVIO_CMV"])}**
-
----
-
-### 💬 Abordagem sugerida
-
-"Passei aqui porque sua meta do mês é **{moeda(d["META"])}**, você realizou **{moeda(d["REALIZADO"])}** e está projetando **{moeda(d["PROJECAO"])}**.  
-Hoje temos um gap de **{moeda(d["GAP"])}**, com % gap de **{pct(d["PERC_GAP"])}**, contra **{moeda(d["VALOR_2025"])}** em 2025.  
-Quero te ajudar a ajustar isso com uma compra mais estratégica."
-
-</div>
-""", unsafe_allow_html=True)
-
-    primeiro = df.iloc[0]
-    st.error(f"👉 Comece por: {primeiro['CLIENTE_FINAL']} | {primeiro['PRIORIDADE']} | {primeiro['ACAO']}")
-
+💬 *"Meta {_m(d["META"])}, realizou {_m(d["REALIZADO"])}, projetando {_m(d["PROJECAO"])}. GAP de {_m(d["GAP"])} ({_p(d["PERC_GAP"])})."*
+</div>""",unsafe_allow_html=True)
+    primeiro=df.iloc[0]
+    st.error(f"👉 Comece por: {primeiro['CLIENTE_FINAL']} · {primeiro['PRIORIDADE']} · {primeiro['ACAO']}")
 
 # ══════════════════════════════════════════════════════════════
-# MÓDULO: COTABOT
+# COTABOT
 # ══════════════════════════════════════════════════════════════
-elif modulo == "💰 CotaBot — Cotação":
-
-    def normalizar_texto(texto):
-        texto = str(texto).strip().lower()
-        trocas = {"ç":"c","ã":"a","á":"a","à":"a","â":"a","é":"e","ê":"e",
-                  "í":"i","ó":"o","ô":"o","õ":"o","ú":"u"}
-        for k,v in trocas.items():
-            texto = texto.replace(k,v)
-        return texto
-
-    def limpar_ean(serie):
-        return (serie.astype(str).str.strip()
-                .str.replace(".0","",regex=False)
-                .str.replace(" ","",regex=False)
-                .str.replace("-","",regex=False))
-
-    def converter_valor_monetario(serie):
-        if pd.api.types.is_numeric_dtype(serie):
-            return pd.to_numeric(serie, errors="coerce")
-        s = serie.astype(str).str.strip().str.replace("R$","",regex=False).str.replace(" ","",regex=False)
-        tem_virgula = s.str.contains(",",regex=False,na=False)
-        s.loc[tem_virgula] = s.loc[tem_virgula].str.replace(".",",",regex=False).str.replace(",",".",regex=False)
-        return pd.to_numeric(s, errors="coerce")
-
-    def formatar_preco_brl(valor):
-        if pd.isna(valor) or valor == "": return ""
-        try: return f"{float(valor):.2f}".replace(".",",")
+elif pagina=="cotabot":
+    def norm(t):
+        t=str(t).strip().lower()
+        for k,v in {"ç":"c","ã":"a","á":"a","à":"a","â":"a","é":"e","ê":"e","í":"i","ó":"o","ô":"o","õ":"o","ú":"u"}.items(): t=t.replace(k,v)
+        return t
+    def leia(s): return s.astype(str).str.strip().str.replace(".0","",regex=False).str.replace(" ","",regex=False).str.replace("-","",regex=False)
+    def conv(s):
+        if pd.api.types.is_numeric_dtype(s): return pd.to_numeric(s,errors="coerce")
+        s2=s.astype(str).str.strip().str.replace("R$","",regex=False).str.replace(" ","",regex=False)
+        tv=s2.str.contains(",",regex=False,na=False)
+        s2.loc[tv]=s2.loc[tv].str.replace(".",",",regex=False).str.replace(",",".",regex=False)
+        return pd.to_numeric(s2,errors="coerce")
+    def fmt(v):
+        if pd.isna(v) or v=="": return ""
+        try: return f"{float(v):.2f}".replace(".",",")
         except: return ""
-
-    def carregar_excel_normal(uploaded_file, sheet_name=0):
-        nome = uploaded_file.name.lower()
-        uploaded_file.seek(0)
-        if nome.endswith(".xlsx"): return pd.read_excel(uploaded_file, engine="openpyxl", sheet_name=sheet_name)
-        if nome.endswith(".xls"):  return pd.read_excel(uploaded_file, engine="xlrd",    sheet_name=sheet_name)
-        return pd.read_excel(uploaded_file, sheet_name=sheet_name)
-
-    def carregar_excel_bruto(uploaded_file, sheet_name=0):
-        nome = uploaded_file.name.lower()
-        uploaded_file.seek(0)
-        if nome.endswith(".xlsx"): return pd.read_excel(uploaded_file, engine="openpyxl", sheet_name=sheet_name, header=None)
-        if nome.endswith(".xls"):  return pd.read_excel(uploaded_file, engine="xlrd",    sheet_name=sheet_name, header=None)
-        return pd.read_excel(uploaded_file, sheet_name=sheet_name, header=None)
-
-    def detectar_linha_cabecalho_cotacao(df_bruto):
-        palavras = ["ean","codigo ean","código ean","cod barra","cód barra",
-                    "codigo de barras","produto","descricao","descrição",
-                    "fabricante","qtd","qt","preco","preço","preco un",
-                    "preço un","% desc","preco c/ desc","preço c/ desc"]
-        limite = min(len(df_bruto), 25)
-        melhor_linha, melhor_score = 0, -1
-        for i in range(limite):
-            linha = df_bruto.iloc[i].fillna("").astype(str).tolist()
-            linha_norm = [normalizar_texto(x) for x in linha]
-            score = sum(1 for cel in linha_norm for p in palavras if p in cel)
-            if score > melhor_score:
-                melhor_score = score
-                melhor_linha = i
-        return melhor_linha
-
-    def detectar_linha_cabecalho_base(df_bruto):
-        palavras = ["codigo ean","código ean","descricao","descrição",
-                    "laboratorio","laboratório","st","preco nf","preço nf","estoque"]
-        limite = min(len(df_bruto), 15)
-        melhor_linha, melhor_score = 0, -1
-        for i in range(limite):
-            linha = df_bruto.iloc[i].fillna("").astype(str).tolist()
-            linha_norm = [normalizar_texto(x) for x in linha]
-            score = sum(1 for cel in linha_norm for p in palavras if p in cel)
-            if score > melhor_score:
-                melhor_score = score
-                melhor_linha = i
-        return melhor_linha
-
-    def construir_dataframe_com_cabecalho(df_bruto, header_row):
-        cab   = df_bruto.iloc[header_row].fillna("").astype(str).tolist()
-        dados = df_bruto.iloc[header_row+1:].copy().reset_index(drop=True)
-        dados.columns = cab
-        return dados
-
-    def encontrar_coluna_por_nomes(colunas, nomes_alvo):
-        mapa = {normalizar_texto(c): c for c in colunas}
-        for alvo in nomes_alvo:
-            alvo_norm = normalizar_texto(alvo)
-            for col_norm, col_original in mapa.items():
-                if alvo_norm == col_norm: return col_original
-            for col_norm, col_original in mapa.items():
-                if alvo_norm in col_norm: return col_original
+    def xl(f,s=0):
+        f.seek(0); n=f.name.lower()
+        if n.endswith(".xlsx"): return pd.read_excel(f,engine="openpyxl",sheet_name=s,header=None)
+        if n.endswith(".xls"):  return pd.read_excel(f,engine="xlrd",sheet_name=s,header=None)
+        return pd.read_excel(f,sheet_name=s,header=None)
+    def det_h(db,words,lim=25):
+        bl,bs=0,-1
+        for i in range(min(len(db),lim)):
+            row=[norm(x) for x in db.iloc[i].fillna("").astype(str).tolist()]
+            sc=sum(1 for c in row for w in words if w in c)
+            if sc>bs: bs=sc; bl=i
+        return bl
+    def mk(db,h):
+        cab=db.iloc[h].fillna("").astype(str).tolist()
+        d=db.iloc[h+1:].copy().reset_index(drop=True); d.columns=cab; return d
+    def fc(cols,names):
+        mp={norm(c):c for c in cols}
+        for n in names:
+            nn=norm(n)
+            for cn,co in mp.items():
+                if nn==cn: return co
+            for cn,co in mp.items():
+                if nn in cn: return co
         return None
+    def escrever_xlsx(f,aba,hrow,pcol,precos):
+        f.seek(0); wb=load_workbook(f); ws=wb[aba]
+        for i,p in enumerate(precos):
+            ws.cell(row=hrow+2+i,column=pcol+1,value=float(p) if pd.notna(p) else None)
+        buf=io.BytesIO(); wb.save(buf); buf.seek(0); return buf.getvalue()
 
-    def sugerir_coluna_ean(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["ean","codigo ean","código ean","cod barra","cód barra","codigo de barras","gtin"])
+    st.markdown('<div class="app-header"><h1>💰 CotaBot</h1><p>Cruzamento por EAN · Preenchimento automático · Download pronto</p></div>',unsafe_allow_html=True)
+    st.markdown("#### 1. Base da empresa")
+    base_f=st.file_uploader("Base de produtos (EAN + preço + estoque)",type=["xlsx","xls"],key="c_base")
+    base_df=None
+    if base_f:
+        braw=xl(base_f); bh=det_h(braw,["codigo ean","código ean","descricao","laboratorio","st","preco nf","estoque"])
+        base_df=mk(braw,bh); st.dataframe(base_df.head(8),use_container_width=True)
 
-    def sugerir_coluna_preco_real(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["preço real","preco real","preço final","preco final","valor final","preço venda","preco venda"])
+    st.markdown("---"); st.markdown("#### 2. Cotação do cliente")
+    cot_f=st.file_uploader("Planilha de cotação",type=["xlsx","xls"],key="c_cot")
+    cot_df=None; craw=None; aba=None; hrow=None
+    if cot_f:
+        if cot_f.name.lower().endswith(".xlsx"):
+            cot_f.seek(0); wb2=load_workbook(cot_f,read_only=True); abas=wb2.sheetnames; wb2.close()
+        else: abas=[0]
+        aba=st.selectbox("Aba",abas,key="c_aba") if len(abas)>1 else abas[0]
+        craw=xl(cot_f,sheet_name=aba)
+        ch=det_h(craw,["ean","codigo ean","produto","descricao","qtd","preco","fabricante"])
+        hrow=st.number_input("Linha do cabeçalho",min_value=1,max_value=max(1,len(craw)),value=int(ch+1),step=1,key="c_h")-1
+        cot_df=mk(craw,hrow); st.dataframe(cot_df.head(8),use_container_width=True)
 
-    def sugerir_coluna_st(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["st","valor st","substituicao tributaria","substituição tributária"])
-
-    def sugerir_coluna_preco_nf(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["preço nf","preco nf","valor nf","preço nota","preco nota","nf"])
-
-    def sugerir_coluna_estoque(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["estoque","saldo","qtd estoque","quantidade estoque","disponivel","disponível"])
-
-    def sugerir_coluna_preco_cotacao(df):
-        return encontrar_coluna_por_nomes(df.columns,
-            ["preço","preco","price","valor","preço un","preco un","preço unit","preco unit",
-             "preço unitário","preco unitario","preço c/ desc","preco c/ desc"])
-
-    def escrever_precos_em_xlsx_original(uploaded_file, aba_nome, header_row_zero_based,
-                                          preco_col_idx_zero_based, precos_numericos):
-        uploaded_file.seek(0)
-        wb = load_workbook(uploaded_file)
-        ws = wb[aba_nome]
-        data_start_row = header_row_zero_based + 2
-        for i, preco in enumerate(precos_numericos):
-            row_excel = data_start_row + i
-            col_excel = preco_col_idx_zero_based + 1
-            if pd.notna(preco):
-                ws.cell(row=row_excel, column=col_excel, value=float(preco))
-            else:
-                ws.cell(row=row_excel, column=col_excel, value=None)
-        buf = io.BytesIO()
-        wb.save(buf)
-        buf.seek(0)
-        return buf.getvalue()
-
-    # ── header ──
-    st.markdown("""
-    <div class="app-header">
-        <h1>💰 CotaBot</h1>
-        <p>Sua cotação pronta em segundos — cruzamento automático por EAN.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── base da empresa ──
-    st.markdown("### 1. Base da empresa")
-    base_file = st.file_uploader("Subir base de produtos (EAN + preço + estoque)", type=["xlsx","xls"], key="c_base")
-
-    base_df   = None
-    base_bruto = None
-
-    if base_file:
-        base_bruto = carregar_excel_bruto(base_file)
-        base_header_row = detectar_linha_cabecalho_base(base_bruto)
-        base_df = construir_dataframe_com_cabecalho(base_bruto, base_header_row)
-        st.markdown("### 2. Prévia da base")
-        st.dataframe(base_df.head(10), use_container_width=True)
-
-    # ── cotação do cliente ──
-    st.markdown("---")
-    st.markdown("### 3. Cotação do cliente")
-
-    cotacao_file = st.file_uploader("Subir planilha de cotação do cliente", type=["xlsx","xls"], key="c_cotacao")
-
-    cotacao_df   = None
-    cotacao_bruto = None
-    aba_escolhida = None
-
-    if cotacao_file:
-        nome_arq = cotacao_file.name.lower()
-        if nome_arq.endswith(".xlsx"):
-            cotacao_file.seek(0)
-            wb_temp = load_workbook(cotacao_file, read_only=True)
-            abas = wb_temp.sheetnames
-            wb_temp.close()
-        else:
-            abas = [0]
-
-        if len(abas) > 1:
-            aba_escolhida = st.selectbox("Aba da cotação", abas, key="c_aba")
-        else:
-            aba_escolhida = abas[0]
-
-        cotacao_bruto = carregar_excel_bruto(cotacao_file, sheet_name=aba_escolhida)
-        cotacao_header_row_detectado = detectar_linha_cabecalho_cotacao(cotacao_bruto)
-
-        header_row_manual = st.number_input(
-            "Linha do cabeçalho da cotação", min_value=1,
-            max_value=max(1, len(cotacao_bruto)),
-            value=int(cotacao_header_row_detectado+1), step=1,
-            key="c_header"
-        )
-        header_row  = int(header_row_manual - 1)
-        cotacao_df  = construir_dataframe_com_cabecalho(cotacao_bruto, header_row)
-
-        st.markdown("### Prévia da cotação")
-        st.dataframe(cotacao_df.head(10), use_container_width=True)
-
-    # ── associação ──
-    if base_df is not None and cotacao_df is not None:
-        st.markdown("---")
-        st.subheader("4. Associação das colunas")
-
-        col_base_ean_sug        = sugerir_coluna_ean(base_df)
-        col_base_preco_real_sug = sugerir_coluna_preco_real(base_df)
-        col_base_st_sug         = sugerir_coluna_st(base_df)
-        col_base_preco_nf_sug   = sugerir_coluna_preco_nf(base_df)
-        col_base_estoque_sug    = sugerir_coluna_estoque(base_df)
-        col_cot_ean_sug         = sugerir_coluna_ean(cotacao_df)
-        col_cot_preco_sug       = sugerir_coluna_preco_cotacao(cotacao_df)
-
-        estoque_minimo = st.number_input("Estoque mínimo para incluir produto", min_value=0, value=1, step=1, key="c_estoque")
-
-        st.info("O sistema sugere automaticamente, mas o representante confirma antes de processar.")
-
-        s1, s2 = st.columns(2)
-
+    if base_df is not None and cot_df is not None:
+        st.markdown("---"); st.subheader("3. Associar colunas")
+        s1,s2=st.columns(2)
+        ob=["-- Selecionar --"]+list(base_df.columns); oc=["-- Selecionar --"]+list(cot_df.columns)
+        be=fc(base_df.columns,["ean","codigo ean","código ean","gtin"])
+        bp=fc(base_df.columns,["preço real","preco real","preço final","valor final"])
+        bs=fc(base_df.columns,["st","valor st"]); bn=fc(base_df.columns,["preço nf","preco nf","valor nf"])
+        bst=fc(base_df.columns,["estoque","saldo","disponivel"])
+        ce=fc(cot_df.columns,["ean","codigo ean","gtin"]); cp2=fc(cot_df.columns,["preço","preco","valor","price"])
         with s1:
-            st.markdown("#### Base da empresa")
-            opcoes_base = ["-- Selecionar --"] + list(base_df.columns)
-            idx_base_ean = opcoes_base.index(col_base_ean_sug) if col_base_ean_sug in opcoes_base else 0
-            col_base_ean = st.selectbox("Coluna EAN da base", opcoes_base, index=idx_base_ean, key="c_base_ean")
-
-            modo_preco = st.radio("Forma de preço da base",
-                options=["Usar PREÇO REAL","Calcular ST + PREÇO NF"],
-                index=0 if col_base_preco_real_sug else 1, key="c_modo_preco")
-
-            if modo_preco == "Usar PREÇO REAL":
-                idx_pr = opcoes_base.index(col_base_preco_real_sug) if col_base_preco_real_sug in opcoes_base else 0
-                col_base_preco_real = st.selectbox("Coluna PREÇO REAL", opcoes_base, index=idx_pr, key="c_preco_real")
-                col_base_st = None
-                col_base_preco_nf = None
+            st.markdown("**Base**")
+            col_be=st.selectbox("EAN base",ob,index=ob.index(be) if be in ob else 0,key="c_be")
+            modo=st.radio("Preço",["Usar PREÇO REAL","ST + PREÇO NF"],index=0 if bp else 1,key="c_modo")
+            if modo=="Usar PREÇO REAL":
+                col_bp=st.selectbox("PREÇO REAL",ob,index=ob.index(bp) if bp in ob else 0,key="c_bp"); col_bs=col_bn=None
             else:
-                idx_st = opcoes_base.index(col_base_st_sug) if col_base_st_sug in opcoes_base else 0
-                idx_nf = opcoes_base.index(col_base_preco_nf_sug) if col_base_preco_nf_sug in opcoes_base else 0
-                col_base_st       = st.selectbox("Coluna ST",       opcoes_base, index=idx_st, key="c_st")
-                col_base_preco_nf = st.selectbox("Coluna PREÇO NF", opcoes_base, index=idx_nf, key="c_preco_nf")
-                col_base_preco_real = None
-
-            col_base_estoque = col_base_estoque_sug
-            if col_base_estoque_sug:
-                st.caption(f"Coluna ESTOQUE detectada: **{col_base_estoque_sug}**")
-            else:
-                st.warning("Não consegui detectar automaticamente a coluna ESTOQUE.")
-
+                col_bs=st.selectbox("ST",ob,index=ob.index(bs) if bs in ob else 0,key="c_bs")
+                col_bn=st.selectbox("PREÇO NF",ob,index=ob.index(bn) if bn in ob else 0,key="c_bn"); col_bp=None
+            est_min=st.number_input("Estoque mínimo",min_value=0,value=1,step=1,key="c_est"); col_bst=bst
         with s2:
-            st.markdown("#### Cotação do cliente")
-            opcoes_cot = ["-- Selecionar --"] + list(cotacao_df.columns)
-            idx_cot_ean   = opcoes_cot.index(col_cot_ean_sug)   if col_cot_ean_sug   in opcoes_cot else 0
-            idx_cot_preco = opcoes_cot.index(col_cot_preco_sug) if col_cot_preco_sug in opcoes_cot else 0
-            col_cot_ean   = st.selectbox("Coluna EAN da cotação",   opcoes_cot, index=idx_cot_ean,   key="c_cot_ean")
-            col_cot_preco = st.selectbox("Coluna PREÇO da cotação", opcoes_cot, index=idx_cot_preco, key="c_cot_preco")
-
+            st.markdown("**Cotação**")
+            col_ce=st.selectbox("EAN cotação",oc,index=oc.index(ce) if ce in oc else 0,key="c_ce")
+            col_cp=st.selectbox("PREÇO cotação",oc,index=oc.index(cp2) if cp2 in oc else 0,key="c_cp")
         st.markdown("---")
-        processar = st.button("5. Processar cotação", use_container_width=True, key="c_processar")
-
-        if processar:
+        if st.button("⚡ Processar cotação",use_container_width=True,key="c_proc"):
             try:
-                erros = []
-                if col_base_ean == "-- Selecionar --": erros.append("Selecione a coluna EAN da base.")
-                if not col_base_estoque:               erros.append("Coluna ESTOQUE não detectada.")
-                if col_cot_ean == "-- Selecionar --":  erros.append("Selecione a coluna EAN da cotação.")
-                if col_cot_preco == "-- Selecionar --":erros.append("Selecione a coluna PREÇO da cotação.")
-                if modo_preco == "Usar PREÇO REAL" and col_base_preco_real == "-- Selecionar --":
-                    erros.append("Selecione a coluna PREÇO REAL.")
-                if modo_preco != "Usar PREÇO REAL":
-                    if col_base_st == "-- Selecionar --":       erros.append("Selecione a coluna ST.")
-                    if col_base_preco_nf == "-- Selecionar --": erros.append("Selecione a coluna PREÇO NF.")
-                if erros:
-                    for e in erros: st.error(e)
-                    st.stop()
-
-                base_proc = base_df.copy()
-                cot_proc  = cotacao_df.copy()
-
-                base_proc[col_base_ean] = limpar_ean(base_proc[col_base_ean])
-                cot_proc[col_cot_ean]   = limpar_ean(cot_proc[col_cot_ean])
-                base_proc[col_base_estoque] = pd.to_numeric(base_proc[col_base_estoque], errors="coerce").fillna(0)
-
-                if modo_preco == "Usar PREÇO REAL":
-                    base_proc["_PRECO_FINAL_"] = converter_valor_monetario(base_proc[col_base_preco_real])
+                bp3=base_df.copy(); cp3=cot_df.copy()
+                bp3[col_be]=leia(bp3[col_be]); cp3[col_ce]=leia(cp3[col_ce])
+                if col_bst: bp3[col_bst]=pd.to_numeric(bp3[col_bst],errors="coerce").fillna(0)
+                if modo=="Usar PREÇO REAL": bp3["_P_"]=conv(bp3[col_bp])
                 else:
-                    base_proc["_ST_"]       = converter_valor_monetario(base_proc[col_base_st])
-                    base_proc["_PRECO_NF_"] = converter_valor_monetario(base_proc[col_base_preco_nf])
-                    base_proc["_PRECO_FINAL_"] = base_proc["_ST_"].fillna(0) + base_proc["_PRECO_NF_"].fillna(0)
-
-                base_filtrada = base_proc[base_proc[col_base_estoque] >= estoque_minimo].copy()
-                base_merge    = base_filtrada[[col_base_ean,"_PRECO_FINAL_"]].drop_duplicates(subset=[col_base_ean])
-
-                resultado = cot_proc.merge(base_merge, left_on=col_cot_ean, right_on=col_base_ean, how="left")
-                precos_numericos = resultado["_PRECO_FINAL_"].tolist()
-                precos_preview   = [formatar_preco_brl(x) for x in precos_numericos]
-
-                total_itens    = len(cot_proc)
-                encontrados    = int(pd.notna(resultado["_PRECO_FINAL_"]).sum())
-                nao_encontrados= int(pd.isna(resultado["_PRECO_FINAL_"]).sum())
-
-                c1,c2,c3 = st.columns(3)
-                c1.metric("Itens na cotação", total_itens)
-                c2.metric("Encontrados",      encontrados)
-                c3.metric("Não encontrados",  nao_encontrados)
-
-                preview = cot_proc.copy()
-                preview[col_cot_preco] = preview[col_cot_preco].astype("object")
-                preview[col_cot_preco] = precos_preview
-
-                st.markdown("### 6. Prévia final")
-                st.dataframe(preview.head(30), use_container_width=True)
-
-                linha_cab = cotacao_bruto.iloc[header_row].fillna("").astype(str).tolist()
-                preco_col_idx = next((idx for idx,v in enumerate(linha_cab)
-                                      if str(v).strip()==str(col_cot_preco).strip()), None)
-
-                if preco_col_idx is None:
-                    st.error("Não consegui localizar a coluna de preço na planilha original.")
-                    st.stop()
-
-                if cotacao_file.name.lower().endswith(".xlsx"):
-                    arquivo_saida = escrever_precos_em_xlsx_original(
-                        cotacao_file, aba_escolhida, header_row, preco_col_idx, precos_numericos)
-                    st.download_button(
-                        label="⬇️ Baixar cotação preenchida",
-                        data=arquivo_saida,
-                        file_name="cotacao_preenchida.xlsx",
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        use_container_width=True, key="c_download")
+                    bp3["_S_"]=conv(bp3[col_bs]); bp3["_N_"]=conv(bp3[col_bn])
+                    bp3["_P_"]=bp3["_S_"].fillna(0)+bp3["_N_"].fillna(0)
+                bf=bp3[bp3[col_bst]>=est_min].copy() if col_bst else bp3.copy()
+                bm=bf[[col_be,"_P_"]].drop_duplicates(subset=[col_be])
+                res=cp3.merge(bm,left_on=col_ce,right_on=col_be,how="left")
+                nums=res["_P_"].tolist(); prev=[fmt(x) for x in nums]
+                tot=len(cp3); enc=int(pd.notna(res["_P_"]).sum())
+                a,b,c=st.columns(3); a.metric("Total",tot); b.metric("✅ Encontrados",enc); c.metric("❌ Não encontrados",tot-enc)
+                pv=cp3.copy(); pv[col_cp]=pv[col_cp].astype("object"); pv[col_cp]=prev
+                st.dataframe(pv.head(20),use_container_width=True)
+                cab_row=craw.iloc[hrow].fillna("").astype(str).tolist()
+                pidx=next((i for i,v in enumerate(cab_row) if str(v).strip()==str(col_cp).strip()),None)
+                if pidx is None: st.error("Coluna de preço não localizada."); st.stop()
+                if cot_f.name.lower().endswith(".xlsx"):
+                    out=escrever_xlsx(cot_f,aba,hrow,pidx,nums)
+                    st.download_button("⬇️ Baixar cotação preenchida",out,"cotacao_preenchida.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",use_container_width=True,key="c_dl")
                 else:
-                    resultado_bruto = cotacao_bruto.copy()
-                    resultado_bruto[preco_col_idx] = resultado_bruto[preco_col_idx].astype("object")
-                    for i, preco in enumerate(precos_numericos):
-                        linha_real = header_row + 1 + i
-                        resultado_bruto.iat[linha_real, preco_col_idx] = float(preco) if pd.notna(preco) else None
-                    output = io.BytesIO()
-                    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-                        resultado_bruto.to_excel(writer, index=False, header=False, sheet_name="Cotacao_Preenchida")
-                    output.seek(0)
-                    st.download_button(
-                        label="⬇️ Baixar cotação preenchida",
-                        data=output.getvalue(),
-                        file_name="cotacao_preenchida.xlsx",
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        use_container_width=True, key="c_download_xls")
-                    st.info("Arquivo .xls: saída em .xlsx, estrutura preservada.")
+                    rb=craw.copy(); rb[pidx]=rb[pidx].astype("object")
+                    for i,p in enumerate(nums): rb.iat[hrow+1+i,pidx]=float(p) if pd.notna(p) else None
+                    buf=io.BytesIO()
+                    with pd.ExcelWriter(buf,engine="openpyxl") as w: rb.to_excel(w,index=False,header=False)
+                    buf.seek(0); st.download_button("⬇️ Baixar",buf.getvalue(),"cotacao_preenchida.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",use_container_width=True,key="c_dl2")
+            except Exception as e: st.error(f"Erro: {e}")
+    else: st.info("Suba a base e a cotação para configurar.")
 
-            except Exception as e:
-                st.error(f"Erro ao processar: {e}")
-    else:
-        st.markdown("---")
-        st.info("Envie a base e a cotação para configurar o preenchimento.")
+# ══════════════════════════════════════════════════════════════
+# COBRANÇA / VISITAS (slots)
+# ══════════════════════════════════════════════════════════════
+elif pagina=="cobranca":
+    st.markdown('<div class="app-header"><h1>🧾 Cobrança Inteligente</h1><p>Clientes vencidos e prioridade de cobrança.</p></div>',unsafe_allow_html=True)
+    st.info("📨 Envie o código do app de Cobrança para ativar este módulo.")
+    st.markdown("**Este módulo vai mostrar:**\n- ✅ Clientes com títulos vencidos\n- ✅ Dias em atraso e valor total\n- ✅ Prioridade automática de cobrança\n- ✅ Histórico e sugestão de abordagem")
+
+elif pagina=="visitas":
+    st.markdown('<div class="app-header"><h1>📍 Bússola de Visitas</h1><p>Rota otimizada e plano de ataque do dia.</p></div>',unsafe_allow_html=True)
+    st.info("📨 Envie o código do app de Visitas para ativar este módulo.")
+    st.markdown("**Este módulo vai mostrar:**\n- ✅ Rota otimizada por cidade\n- ✅ Clientes prioritários do dia\n- ✅ Mix faltante por cliente\n- ✅ Plano de ataque automático")
