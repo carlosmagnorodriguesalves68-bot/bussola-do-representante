@@ -1,0 +1,30 @@
+Bussola do Representante V1.3
+
+Tipo: versao local estavel com Central de Importacao de Bases
+Frontend: Next.js
+Backend: Python/FastAPI
+Status: sem login, sem banco de dados e sem SaaS implementado
+
+Modulos ativos:
+- Início
+- Visão Geral do Cliente
+- Campanha
+- Cobrança
+- Cotação
+- Pedidos
+
+Acessos internos:
+- Importador nas abas operacionais
+- Raio-X Cliente dentro da Visão Geral do Cliente
+- Cliente360 como motor/base central
+
+Fluxo de bases:
+- Início orienta o dia e nao recebe planilhas
+- Visão Geral do Cliente importa/usa CMK + Curva
+- Campanha carrega/usa planilha de campanha
+- Cotação e Pedidos seguem com arquivos próprios
+
+Endpoint central:
+- GET /api/cliente360
+- GET /api/plano-ataque
+- GET /api/importador/status

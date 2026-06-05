@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.portal_runtime/
+backend/.runtime/
+.streamlit_tmp/
+.next/
+frontend/.next/
+frontend/node_modules/
+.venv/
+venv/
+env/
+.env
+.DS_Store
